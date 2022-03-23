@@ -1,21 +1,23 @@
 
 import javax.swing.*;
-import java.awt.Color;
+import java.awt.*;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class clockGUI extends javax.swing.JFrame {
     int xMouse;
     int yMouse;
 
-
     public clockGUI() {
         initComponents();
         setBackground(new Color(0, 0, 0, 0));
-
     }
 
     private void initComponents() {
 
-        exit = new javax.swing.JLabel();
+        JLabel exit = new JLabel();
         time = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -32,13 +34,13 @@ public class clockGUI extends javax.swing.JFrame {
         exit.setText("exit");
         exit.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                exitMouseClicked(evt);
+                exitMouseClicked();
             }
         });
 
         getContentPane().add(exit, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 0, -1, -1));
 
-        time.setFont(new java.awt.Font("Bookman Old Style", 0, 33));
+        time.setFont(new java.awt.Font("Bookman Old Style", Font.PLAIN, 33));
         time.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         time.setToolTipText("");
         time.setAlignmentY(0.0F);
@@ -58,8 +60,7 @@ public class clockGUI extends javax.swing.JFrame {
         pack();
     }
 
-    private void exitMouseClicked(java.awt.event.MouseEvent evt) {
-
+    private void exitMouseClicked() {
         System.exit(0);
     }
 
@@ -83,7 +84,7 @@ public class clockGUI extends javax.swing.JFrame {
         yMouse = evt.getY();
     }
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -95,21 +96,33 @@ public class clockGUI extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(clockGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
 
-
-        /* Create and display the form */
         Time t = new Time();
-
-
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new clockGUI().setVisible(true);
-
-            }
-        });
+        java.awt.EventQueue.invokeLater(() -> new clockGUI().setVisible(true));
         t.setTime();
     }
 
-    private javax.swing.JLabel exit;
     public static javax.swing.JLabel time;
+
+}
+
+class Time {
+    public void setTime() {
+        do {
+            try {
+                clockGUI.time.setText(new SimpleDateFormat("hh:mm:ss a").format(Calendar.getInstance().getTime()));
+            } catch (Exception ignored) {
+            }
+
+            clockGUI.time.setForeground(Color.green);
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(clockGUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } while (true);
+
+
+    }
+
 
 }
